@@ -71,6 +71,75 @@ resources:
         - data
         - apply
 
+  firewall_nat_port_forward:
+    create:
+      path: /api/v2/firewall/nat/port_forward
+      method: POST
+    read:
+      path: /api/v2/firewall/nat/port_forward
+      method: GET
+    update:
+      path: /api/v2/firewall/nat/port_forward
+      method: PATCH
+    delete:
+      path: /api/v2/firewall/nat/port_forward
+      method: DELETE
+    schema:
+      ignores:
+        - code
+        - status
+        - response_id
+        - message
+        - _links
+        - data
+        - apply
+
+  firewall_nat_outbound_mapping:
+    create:
+      path: /api/v2/firewall/nat/outbound/mapping
+      method: POST
+    read:
+      path: /api/v2/firewall/nat/outbound/mapping
+      method: GET
+    update:
+      path: /api/v2/firewall/nat/outbound/mapping
+      method: PATCH
+    delete:
+      path: /api/v2/firewall/nat/outbound/mapping
+      method: DELETE
+    schema:
+      ignores:
+        - code
+        - status
+        - response_id
+        - message
+        - _links
+        - data
+        - apply
+
+  firewall_nat_one_to_one_mapping:
+    create:
+      path: /api/v2/firewall/nat/one_to_one/mapping
+      method: POST
+    read:
+      path: /api/v2/firewall/nat/one_to_one/mapping
+      method: GET
+    update:
+      path: /api/v2/firewall/nat/one_to_one/mapping
+      method: PATCH
+    delete:
+      path: /api/v2/firewall/nat/one_to_one/mapping
+      method: DELETE
+    schema:
+      ignores:
+        - code
+        - status
+        - response_id
+        - message
+        - _links
+        - data
+        - apply
+
 data_sources:
   firewall_aliases:
     read:

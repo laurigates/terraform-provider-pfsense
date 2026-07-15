@@ -104,6 +104,9 @@ func (p *pfsenseProvider) Resources(_ context.Context) []func() resource.Resourc
 	return []func() resource.Resource{
 		NewFirewallAliasResource,
 		NewFirewallRuleResource,
+		NewFirewallNATPortForwardResource,
+		NewFirewallNATOutboundMappingResource,
+		NewFirewallNATOneToOneMappingResource,
 	}
 }
 
