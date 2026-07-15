@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - uses: extractions/setup-just@53165ef7e734c5c07cb06b3c8e7b647c5aa16db3 # v4
+
+      - run: just build
+
+      - run: just vet
+
+      - run: just test
+
+  # Codegen drift gate: regenerating from spec/openapi.json must reproduce the
+  # committed provider-code-spec.json and internal/provider/*_gen.go exactly.
+  # Catches hand-edits to generated files and spec/config changes committed
+  # without regeneration. No live-box access — pure file transformation.
+  regenerate-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - uses: extractions/setup-just@53165ef7e734c5c07cb06b3c8e7b647c5aa16db3 # v4
+
+      # Pinned to the versions the committed output was generated with —
+      # a tool upgrade is a deliberate change that regenerates in the same PR.
+      - name: Install codegen tools
+        run: |
+          go install github.com/hashicorp/terraform-plugin-codegen-openapi/cmd/tfplugingen-openapi@v0.3.0
+          go install github.com/hashicorp/terraform-plugin-codegen-framework/cmd/tfplugingen-framework@v0.4.1
+
+      - run: just generate
+
+      - name: Verify no codegen drift
+        run: git diff --exit-code

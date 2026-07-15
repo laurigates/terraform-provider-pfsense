@@ -32,6 +32,10 @@ build:
 test:
     go test ./...
 
+# Static analysis
+vet:
+    go vet ./...
+
 # Regenerate provider code from spec/openapi.json
 generate:
     python3 scripts/flatten_spec.py
