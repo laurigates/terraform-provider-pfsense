@@ -56,6 +56,16 @@ func (firewallAliasMapper) setID(m *resource_firewall_alias.FirewallAliasModel, 
 	m.Id = id
 }
 
+func (firewallAliasMapper) applyPath() string { return "/api/v2/firewall/apply" }
+
+func (firewallAliasMapper) applyImmediately(m *resource_firewall_alias.FirewallAliasModel) types.Bool {
+	return m.ApplyImmediately
+}
+
+func (firewallAliasMapper) setApplyImmediately(m *resource_firewall_alias.FirewallAliasModel, v types.Bool) {
+	m.ApplyImmediately = v
+}
+
 func (firewallAliasMapper) toBody(ctx context.Context, m *resource_firewall_alias.FirewallAliasModel, id *int64, diags *diag.Diagnostics) any {
 	body := &firewallAliasAPI{
 		ID:      id,

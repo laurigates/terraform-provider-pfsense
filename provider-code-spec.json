@@ -184,6 +184,16 @@
               "computed_optional_required": "computed",
               "description": "The ID of the object to target."
             }
+          },
+          {
+            "name": "apply_immediately",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": true
+              },
+              "description": "Whether to apply the staged change to the running firewall immediately after this resource is created, updated, or deleted. Defaults to true. Set to false to batch multiple changes and apply them separately."
+            }
           }
         ]
       }

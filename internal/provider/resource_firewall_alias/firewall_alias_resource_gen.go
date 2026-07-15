@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
@@ -24,6 +25,13 @@ func FirewallAliasResourceSchema(ctx context.Context) schema.Schema {
 				Validators: []validator.List{
 					listvalidator.SizeBetween(0, 128),
 				},
+			},
+			"apply_immediately": schema.BoolAttribute{
+				Optional:            true,
+				Computed:            true,
+				Description:         "Whether to apply the staged change to the running firewall immediately after this resource is created, updated, or deleted. Defaults to true. Set to false to batch multiple changes and apply them separately.",
+				MarkdownDescription: "Whether to apply the staged change to the running firewall immediately after this resource is created, updated, or deleted. Defaults to true. Set to false to batch multiple changes and apply them separately.",
+				Default:             booldefault.StaticBool(true),
 			},
 			"descr": schema.StringAttribute{
 				Optional:            true,
@@ -75,10 +83,11 @@ func FirewallAliasResourceSchema(ctx context.Context) schema.Schema {
 }
 
 type FirewallAliasModel struct {
-	Address types.List   `tfsdk:"address"`
-	Descr   types.String `tfsdk:"descr"`
-	Detail  types.List   `tfsdk:"detail"`
-	Id      types.Int64  `tfsdk:"id"`
-	Name    types.String `tfsdk:"name"`
-	Type    types.String `tfsdk:"type"`
+	Address          types.List   `tfsdk:"address"`
+	ApplyImmediately types.Bool   `tfsdk:"apply_immediately"`
+	Descr            types.String `tfsdk:"descr"`
+	Detail           types.List   `tfsdk:"detail"`
+	Id               types.Int64  `tfsdk:"id"`
+	Name             types.String `tfsdk:"name"`
+	Type             types.String `tfsdk:"type"`
 }

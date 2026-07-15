@@ -43,6 +43,16 @@ type resourceMapper[M any] interface {
 	id(*M) types.Int64
 	// setID writes the object id onto a model.
 	setID(*M, types.Int64)
+	// applyPath is the endpoint that applies staged changes for this resource,
+	// e.g. "/api/v2/firewall/apply". Return "" for resources that need no apply
+	// step.
+	applyPath() string
+	// applyImmediately reads the apply_immediately attribute from a model.
+	applyImmediately(*M) types.Bool
+	// setApplyImmediately writes the apply_immediately attribute onto a model.
+	// The API never echoes it, so the helper carries it from plan/prior-state
+	// into the model produced from an API response.
+	setApplyImmediately(*M, types.Bool)
 }
 
 // envelopeResource is a generic resource.Resource implementing the shared
@@ -94,9 +104,6 @@ func (r *envelopeResource[M]) Create(ctx context.Context, req resource.CreateReq
 		return
 	}
 
-	// NOTE: no `apply` flag is sent, so the change is staged in pfSense but not
-	// applied to the running firewall. Apply-staging is handled separately —
-	// see the PRP.
 	data, err := r.client.Do(ctx, http.MethodPost, r.mapper.apiPath(), nil, body)
 	if err != nil {
 		resp.Diagnostics.AddError("Error creating pfSense"+r.mapper.typeNameSuffix(), err.Error())
@@ -105,6 +112,13 @@ func (r *envelopeResource[M]) Create(ctx context.Context, req resource.CreateReq
 
 	state := r.mapper.fromData(ctx, data, &resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
+		return
+	}
+	applyImmediately := r.mapper.applyImmediately(&plan)
+	r.mapper.setApplyImmediately(state, applyImmediately)
+
+	if err := r.applyIfRequested(ctx, applyImmediately); err != nil {
+		resp.Diagnostics.AddError("Error applying pfSense"+r.mapper.typeNameSuffix()+" change", err.Error())
 		return
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, state)...)
@@ -138,6 +152,8 @@ func (r *envelopeResource[M]) Read(ctx context.Context, req resource.ReadRequest
 		// The read-one endpoint may not echo `id`; keep the one we queried by.
 		r.mapper.setID(newState, stateID)
 	}
+	// apply_immediately is provider-side config, not returned by the API.
+	r.mapper.setApplyImmediately(newState, r.mapper.applyImmediately(&state))
 	resp.Diagnostics.Append(resp.State.Set(ctx, newState)...)
 }
 
@@ -170,6 +186,13 @@ func (r *envelopeResource[M]) Update(ctx context.Context, req resource.UpdateReq
 	if r.mapper.id(newState).IsNull() {
 		r.mapper.setID(newState, stateID)
 	}
+	applyImmediately := r.mapper.applyImmediately(&plan)
+	r.mapper.setApplyImmediately(newState, applyImmediately)
+
+	if err := r.applyIfRequested(ctx, applyImmediately); err != nil {
+		resp.Diagnostics.AddError("Error applying pfSense"+r.mapper.typeNameSuffix()+" change", err.Error())
+		return
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, newState)...)
 }
 
@@ -189,7 +212,30 @@ func (r *envelopeResource[M]) Delete(ctx context.Context, req resource.DeleteReq
 			return // already gone
 		}
 		resp.Diagnostics.AddError("Error deleting pfSense"+r.mapper.typeNameSuffix(), err.Error())
+		return
 	}
+
+	if err := r.applyIfRequested(ctx, r.mapper.applyImmediately(&state)); err != nil {
+		resp.Diagnostics.AddError("Error applying pfSense"+r.mapper.typeNameSuffix()+" deletion", err.Error())
+	}
+}
+
+// applyIfRequested applies staged pfSense changes when apply_immediately is
+// true (its default) and the resource declares an apply endpoint. pfSense
+// stages config writes; without this the change persists in config but never
+// reaches the running firewall until applied.
+func (r *envelopeResource[M]) applyIfRequested(ctx context.Context, applyImmediately types.Bool) error {
+	path := r.mapper.applyPath()
+	if path == "" {
+		return nil
+	}
+	// Default to applying when the value is null/unknown (matches the schema
+	// default of true).
+	if !applyImmediately.IsNull() && !applyImmediately.IsUnknown() && !applyImmediately.ValueBool() {
+		return nil
+	}
+	_, err := r.client.Do(ctx, http.MethodPost, path, nil, struct{}{})
+	return err
 }
 
 // ImportState imports by the pfSense object id, e.g.
