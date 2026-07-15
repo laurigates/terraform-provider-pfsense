@@ -1,0 +1,19 @@
+# Build output
+bin/
+
+# Terraform/OpenTofu working files
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfplan
+
+# Secrets
+.env
+*.tfvars
+
+# Machine-specific (regenerate with 'just devrc')
+examples/dev.tfrc
+
+# Real-inventory example configs (describe the live network — never commit)
+examples/local/

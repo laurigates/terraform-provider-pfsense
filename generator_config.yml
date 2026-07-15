@@ -1,0 +1,70 @@
+# Generator config for tfplugingen-openapi.
+#
+# Maps pfSense REST API v2 endpoint pairs (singular = CRUD, plural = list) to
+# Terraform resources / data sources, per docs/prps/pfsense-terraform-provider.md
+# in the gitops repo.
+#
+# Note on the response envelope: every API response is wrapped in
+# {code, status, response_id, message, data: {...}} (the `Success` schema,
+# composed via allOf in the spec). The generator would surface those envelope
+# fields as schema attributes, so they are ignored here for the resource —
+# unwrapping happens in the hand-written API client instead. For the plural
+# data source we keep `data` (the alias list) and ignore only the metadata
+# fields.
+#
+# Regenerate with:
+#   tfplugingen-openapi generate --config generator_config.yml \
+#     --output provider-code-spec.json spec/openapi.json
+#   python3 scripts/patch_spec.py   # id -> computed (see script header)
+#   tfplugingen-framework generate all --input provider-code-spec.json \
+#     --output internal/provider
+
+provider:
+  name: pfsense
+
+resources:
+  firewall_alias:
+    create:
+      path: /api/v2/firewall/alias
+      method: POST
+    read:
+      path: /api/v2/firewall/alias
+      method: GET
+    update:
+      path: /api/v2/firewall/alias
+      method: PATCH
+    delete:
+      path: /api/v2/firewall/alias
+      method: DELETE
+    schema:
+      ignores:
+        # response envelope (unwrapped by the client)
+        - code
+        - status
+        - response_id
+        - message
+        - _links
+        - data
+        # apply-staging flag on DELETE; handled by the client, not the schema
+        - apply
+
+data_sources:
+  firewall_aliases:
+    read:
+      path: /api/v2/firewall/aliases
+      method: GET
+    schema:
+      ignores:
+        # response envelope metadata (data = the alias list is kept)
+        - code
+        - status
+        - response_id
+        - message
+        - _links
+        # list pagination/sort/query params — not useful for a TF data source
+        - limit
+        - offset
+        - sort_by
+        - sort_order
+        - sort_flags
+        - query
