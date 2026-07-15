@@ -48,6 +48,29 @@ resources:
         # apply-staging flag on DELETE; handled by the client, not the schema
         - apply
 
+  firewall_rule:
+    create:
+      path: /api/v2/firewall/rule
+      method: POST
+    read:
+      path: /api/v2/firewall/rule
+      method: GET
+    update:
+      path: /api/v2/firewall/rule
+      method: PATCH
+    delete:
+      path: /api/v2/firewall/rule
+      method: DELETE
+    schema:
+      ignores:
+        - code
+        - status
+        - response_id
+        - message
+        - _links
+        - data
+        - apply
+
 data_sources:
   firewall_aliases:
     read:

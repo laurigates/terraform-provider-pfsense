@@ -197,6 +197,580 @@
           }
         ]
       }
+    },
+    {
+      "name": "firewall_rule",
+      "schema": {
+        "attributes": [
+          {
+            "name": "ackqueue",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The name of the traffic shaper queue to assume as the ACK queue for ACK traffic matching this rule.<br>"
+            }
+          },
+          {
+            "name": "associated_rule_id",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The internal rule ID for the NAT rule associated with this rule.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "created_by",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": "@unknown IP (API)"
+              },
+              "description": "The username and IP of the user who originally created this firewall rule.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "created_time",
+            "int64": {
+              "computed_optional_required": "computed_optional",
+              "description": "The unix timestamp of when this firewall rule was original created.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+                      }
+                    ],
+                    "schema_definition": "int64validator.Between(0, 99999999999999)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "defaultqueue",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The name of the traffic shaper queue to assume as the default queue for traffic matching this rule.<br>"
+            }
+          },
+          {
+            "name": "descr",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "A description detailing the purpose or justification of this firewall rule.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "destination",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The destination address this rule applies to. Valid value options are: an existing interface, an IP address, a subnet CIDR, an existing alias, `any`, `(self)`, `l2tp`, `pppoe`. The context of this address can be inverted by prefixing the value with `!`. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "destination_port",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The destination port this rule applies to. Set to `null` to allow any destination port. Valid options are: a TCP/UDP port number, a TCP/UDP port range separated by `:`, an existing port type firewall alias<br><br>This field is only available when the following conditions are met:<br>- `protocol` must be one of [ tcp, udp, tcp/udp ]<br>"
+            }
+          },
+          {
+            "name": "direction",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": "any"
+              },
+              "description": "The direction of traffic this firewall rule applies to. This field only applies to floating firewall rules.<br><br>This field is only available when the following conditions are met:<br>- `floating` must be equal to `true`<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"any\",\n\"in\",\n\"out\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "disabled",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Enable or disable this firewall rule.<br>"
+            }
+          },
+          {
+            "name": "dnpipe",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The name of the traffic shaper limiter pipe or queue to use for incoming traffic.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "floating",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Mark this rule as a floating firewall rule.<br>"
+            }
+          },
+          {
+            "name": "gateway",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The gateway traffic matching this rule will be routed to. Set to `null` to use default.<br>"
+            }
+          },
+          {
+            "name": "icmptype",
+            "list": {
+              "computed_optional_required": "computed_optional",
+              "element_type": {
+                "string": {}
+              },
+              "description": "Th ICMP subtypes this rule applies to. This field is only applicable when `ipprotocol` is `inet` and `protocol` is `icmp`.<br><br>This field is only available when the following conditions are met:<br>- `protocol` must be equal to `'icmp'`<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+                      }
+                    ],
+                    "schema_definition": "listvalidator.SizeBetween(0, 128)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "interface",
+            "list": {
+              "computed_optional_required": "required",
+              "element_type": {
+                "string": {}
+              },
+              "description": "The interface where packets must originate to match this rule.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+                      }
+                    ],
+                    "schema_definition": "listvalidator.SizeBetween(0, 128)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "ipprotocol",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The IP version(s) this rule applies to.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"inet\",\n\"inet6\",\n\"inet46\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "log",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Enable or disable logging of traffic that matches this rule.<br>"
+            }
+          },
+          {
+            "name": "pdnpipe",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The name of the traffic shaper limiter pipe or queue to use for outgoing traffic.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "protocol",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The IP/transport protocol this rule should match.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"tcp\",\n\"udp\",\n\"tcp/udp\",\n\"icmp\",\n\"esp\",\n\"ah\",\n\"gre\",\n\"ipv6\",\n\"igmp\",\n\"pim\",\n\"ospf\",\n\"carp\",\n\"pfsync\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "quick",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Apply this action to traffic that matches this rule immediately. This field only applies to floating firewall rules.<br><br>This field is only available when the following conditions are met:<br>- `floating` must be equal to `true`<br>"
+            }
+          },
+          {
+            "name": "sched",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The name of an existing firewall schedule to assign to this firewall rule.<br>"
+            }
+          },
+          {
+            "name": "source",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The source address this rule applies to. Valid value options are: an existing interface, an IP address, a subnet CIDR, an existing alias, `any`, `(self)`, `l2tp`, `pppoe`. The context of this address can be inverted by prefixing the value with `!`. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "source_port",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The source port this rule applies to. Set to `null` to allow any source port. Valid options are: a TCP/UDP port number, a TCP/UDP port range separated by `:`, an existing port type firewall alias<br><br>This field is only available when the following conditions are met:<br>- `protocol` must be one of [ tcp, udp, tcp/udp ]<br>"
+            }
+          },
+          {
+            "name": "statetype",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": "keep state"
+              },
+              "description": "The state mechanism to use for this firewall rule.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"keep state\",\n\"sloppy state\",\n\"synproxy state\",\n\"none\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "tag",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "A packet matching this rule can be marked and this mark used to match on other NAT/filter rules. It is called <br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "tcp_flags_any",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Allow any TCP flags.<br>"
+            }
+          },
+          {
+            "name": "tcp_flags_out_of",
+            "list": {
+              "computed_optional_required": "computed_optional",
+              "element_type": {
+                "string": {}
+              },
+              "description": "The TCP flags that can be set for this rule to match.<br><br>This field is only available when the following conditions are met:<br>- `tcp_flags_any` must be equal to `false`<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+                      }
+                    ],
+                    "schema_definition": "listvalidator.SizeBetween(0, 128)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "tcp_flags_set",
+            "list": {
+              "computed_optional_required": "computed_optional",
+              "element_type": {
+                "string": {}
+              },
+              "description": "The TCP flags that must be set for this rule to match.<br><br>This field is only available when the following conditions are met:<br>- `tcp_flags_any` must be equal to `false`<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+                      }
+                    ],
+                    "schema_definition": "listvalidator.SizeBetween(0, 128)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "tracker",
+            "int64": {
+              "computed_optional_required": "computed_optional",
+              "description": "The internal tracking ID for this firewall rule.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+                      }
+                    ],
+                    "schema_definition": "int64validator.Between(0, 99999999999999)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "type",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The action to take against traffic that matches this rule.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"pass\",\n\"block\",\n\"reject\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "updated_by",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": "@unknown IP (API)"
+              },
+              "description": "The username and IP of the user who last updated this firewall rule.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "updated_time",
+            "int64": {
+              "computed_optional_required": "computed_optional",
+              "description": "The unix timestamp of when this firewall rule was original created.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+                      }
+                    ],
+                    "schema_definition": "int64validator.Between(0, 99999999999999)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "int64": {
+              "computed_optional_required": "computed",
+              "description": "The ID of the object to target."
+            }
+          },
+          {
+            "name": "apply_immediately",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": true
+              },
+              "description": "Whether to apply the staged change to the running firewall immediately after this resource is created, updated, or deleted. Defaults to true. Set to false to batch multiple changes and apply them separately."
+            }
+          }
+        ]
+      }
     }
   ],
   "version": "0.1"
