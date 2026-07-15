@@ -103,6 +103,7 @@ func (p *pfsenseProvider) Configure(ctx context.Context, req provider.ConfigureR
 func (p *pfsenseProvider) Resources(_ context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewFirewallAliasResource,
+		NewFirewallRuleResource,
 	}
 }
 
