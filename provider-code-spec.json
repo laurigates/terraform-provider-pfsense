@@ -199,6 +199,810 @@
       }
     },
     {
+      "name": "firewall_nat_one_to_one_mapping",
+      "schema": {
+        "attributes": [
+          {
+            "name": "descr",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "A description for this 1:1 NAT mapping<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "destination",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The destination IP address or subnet that traffic must match to apply this mapping. Valid value options are: an existing interface, an IP address, a subnet CIDR, an existing alias, `any`, `l2tp`, `pppoe`. The context of this address can be inverted by prefixing the value with `!`. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "disabled",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Disables this 1:1 NAT mapping.<br>"
+            }
+          },
+          {
+            "name": "external",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The external IP address or interface for the 1:1 mapping. Valid value options are: an IP address. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "interface",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The interface this 1:1 NAT mapping applies to.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "ipprotocol",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": "inet"
+              },
+              "description": "The IP version this mapping applies to.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"inet\",\n\"inet6\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "natreflection",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "Enables or disables NAT reflection for traffic matching this mapping. Set to `null` to use the system default.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"enable\",\n\"disable\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "nobinat",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Exclude traffic matching this mapping from a later, more general, mapping.<br>"
+            }
+          },
+          {
+            "name": "source",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The source IP address or subnet that traffic must match to apply this mapping. Valid value options are: an existing interface, an IP address, a subnet CIDR, `any`, `l2tp`, `pppoe`. The context of this address can be inverted by prefixing the value with `!`. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "int64": {
+              "computed_optional_required": "computed",
+              "description": "The ID of the object to target."
+            }
+          },
+          {
+            "name": "apply_immediately",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": true
+              },
+              "description": "Whether to apply the staged change to the running firewall immediately after this resource is created, updated, or deleted. Defaults to true. Set to false to batch multiple changes and apply them separately."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "firewall_nat_outbound_mapping",
+      "schema": {
+        "attributes": [
+          {
+            "name": "descr",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "A description for the outbound NAT mapping.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "destination",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The destination network this rule should match. Valid value options are: an existing interface, a subnet CIDR, an existing alias, `any`, `pppoe`. The context of this address can be inverted by prefixing the value with `!`. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "destination_port",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The destination port this rule should match. Valid options are: a TCP/UDP port number, a TCP/UDP port range separated by `:`, an existing port type firewall alias<br>"
+            }
+          },
+          {
+            "name": "disabled",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Disable this outbound NAT rule.<br>"
+            }
+          },
+          {
+            "name": "interface",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The interface on which traffic is matched as it exits the firewall. In most cases this is a WAN-type or another externally-connected interface.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "nat_port",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The external source port or port range used for rewriting the original source port on connections matching the rule. Valid options are: a TCP/UDP port number, a TCP/UDP port range separated by `:`<br><br>This field is only available when the following conditions are met:<br>- `static_nat_port` must be equal to `false`<br>- `nonat` must be equal to `false`<br>"
+            }
+          },
+          {
+            "name": "nonat",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Do not NAT traffic matching this rule.<br>"
+            }
+          },
+          {
+            "name": "nosync",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Do not sync this rule to HA peers.<br>"
+            }
+          },
+          {
+            "name": "poolopts",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The pool option used to load balance external IP mapping when `target` is set to a subnet or alias of many addresses. Set to `null` to revert to the system default.<br><br>This field is only available when the following conditions are met:<br>- `nonat` must be equal to `false`<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"round-robin\",\n\"round-robin sticky-address\",\n\"random\",\n\"random sticky-address\",\n\"source-hash\",\n\"bitmask\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "protocol",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The protocol this rule should match. Use `null` for any protocol.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"tcp\",\n\"udp\",\n\"tcp/udp\",\n\"icmp\",\n\"esp\",\n\"ah\",\n\"gre\",\n\"ipv6\",\n\"igmp\",\n\"pim\",\n\"ospf\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "source",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The source network this rule should match. Valid value options are: an existing interface, a subnet CIDR, an existing alias, `any`, `(self)`, `pppoe`. The context of this address can be inverted by prefixing the value with `!`. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "source_hash_key",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": "0xbcff6ac603ff46e20275fcc683d72632"
+              },
+              "description": "The key that is fed to the hashing algorithm in hex format. This must be a 16 byte (32 character) hex string prefixed with `0x`. If a value is not provided, one will automatically be generated<br><br>This field is only available when the following conditions are met:<br>- `poolopts` must be equal to `'source-hash'`<br>- `nonat` must be equal to `false`<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "source_port",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The source port this rule should match. Valid options are: a TCP/UDP port number, a TCP/UDP port range separated by `:`, an existing port type firewall alias<br>"
+            }
+          },
+          {
+            "name": "static_nat_port",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Do not rewrite source port for traffic matching this rule.<br><br>This field is only available when the following conditions are met:<br>- `nonat` must be equal to `false`<br>"
+            }
+          },
+          {
+            "name": "target",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The target network traffic matching this rule should be translated to. Valid value options are: an IP address, an existing alias. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br><br>This field is only available when the following conditions are met:<br>- `nonat` must be equal to `false`<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "target_subnet",
+            "int64": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": 128
+              },
+              "description": "The subnet bits for the assigned `target`. This field is only applicable if `target` is set to an IP address. This has no affect for alias or interface `targets`.<br><br>This field is only available when the following conditions are met:<br>- `nonat` must be equal to `false`<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+                      }
+                    ],
+                    "schema_definition": "int64validator.Between(1, 128)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "int64": {
+              "computed_optional_required": "computed",
+              "description": "The ID of the object to target."
+            }
+          },
+          {
+            "name": "apply_immediately",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": true
+              },
+              "description": "Whether to apply the staged change to the running firewall immediately after this resource is created, updated, or deleted. Defaults to true. Set to false to batch multiple changes and apply them separately."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "firewall_nat_port_forward",
+      "schema": {
+        "attributes": [
+          {
+            "name": "associated_rule_id",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The associated firewall rule mode. Use an empty string to require a separate firewall rule to be created to pass traffic matching this port forward rule. Use `new` to create a new associated firewall rule to pass traffic matching this port forward rule. Use `pass` to automatically pass traffic matching this port forward rule without the need for a firewall rule.   Otherwise, you can specify the `associated_rule_id` of an existing firewall rule to associate with this port forward rule.<br>"
+            }
+          },
+          {
+            "name": "created_by",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": "@unknown IP (API)"
+              },
+              "description": "The username and IP of the user who originally created this port forward rule.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "created_time",
+            "int64": {
+              "computed_optional_required": "computed_optional",
+              "description": "The unix timestamp of when this port forward rule was original created.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+                      }
+                    ],
+                    "schema_definition": "int64validator.Between(0, 99999999999999)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "descr",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "A description for this port forward rule.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "destination",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The destination address this rule applies to. Valid value options are: an existing interface, an IP address, a subnet CIDR, an existing alias, `any`, `(self)`, `l2tp`, `pppoe`. The context of this address can be inverted by prefixing the value with `!`. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "destination_port",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The destination port this port forward rule applies to. Set to `null` to allow any destination port. Valid options are: a TCP/UDP port number, a TCP/UDP port range separated by `:`, an existing port type firewall alias<br><br>This field is only available when the following conditions are met:<br>- `protocol` must be one of [ tcp, udp, tcp/udp ]<br>"
+            }
+          },
+          {
+            "name": "disabled",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Disables this port forward rule.<br>"
+            }
+          },
+          {
+            "name": "interface",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The interface this port forward rule applies to.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "ipprotocol",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": "inet"
+              },
+              "description": "The IP protocol this port forward rule should match.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"inet\",\n\"inet6\",\n\"inet46\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "local_port",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The port on the internal host to forward matching traffic to. In most cases, this must match the `destination_port` value. In the event that the `desintation_port` is a range, this value should be the first value in that range. Valid options are: a TCP/UDP port number, an existing port type firewall alias<br><br>This field is only available when the following conditions are met:<br>- `protocol` must be one of [ tcp, udp, tcp/udp ]<br>"
+            }
+          },
+          {
+            "name": "natreflection",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The NAT reflection mode to use for traffic matching this port forward rule. Set to `null` to use the system default.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"enable\",\n\"disable\",\n\"purenat\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "nordr",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Disables redirection for traffic matching this rule.<br>"
+            }
+          },
+          {
+            "name": "nosync",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "description": "Prevents this port forward rule from being synced to non-primary CARP members.<br>"
+            }
+          },
+          {
+            "name": "protocol",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The IP/transport protocol this port forward rule should match.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.OneOf(\n\"tcp\",\n\"udp\",\n\"tcp/udp\",\n\"icmp\",\n\"esp\",\n\"ah\",\n\"gre\",\n\"ipv6\",\n\"igmp\",\n\"pim\",\n\"ospf\",\n)"
+                  }
+                },
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "source",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The source address this port forward rule applies to. Valid value options are: an existing interface, an IP address, a subnet CIDR, an existing alias, `any`, `(self)`, `l2tp`, `pppoe`. The context of this address can be inverted by prefixing the value with `!`. For interface values, the `:ip`  modifier can be appended to the value to use the interface's IP address instead of its entire subnet.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "source_port",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "description": "The source port this port forward rule applies to. Set to `null` to allow any source port. Valid options are: a TCP/UDP port number, a TCP/UDP port range separated by `:`, an existing port type firewall alias<br><br>This field is only available when the following conditions are met:<br>- `protocol` must be one of [ tcp, udp, tcp/udp ]<br>"
+            }
+          },
+          {
+            "name": "target",
+            "string": {
+              "computed_optional_required": "required",
+              "description": "The IP address or alias of the internal host to forward matching traffic to.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "updated_by",
+            "string": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": "@unknown IP (API)"
+              },
+              "description": "The username and IP of the user who last updated this port forward rule.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+                      }
+                    ],
+                    "schema_definition": "stringvalidator.LengthBetween(0, 1024)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "updated_time",
+            "int64": {
+              "computed_optional_required": "computed_optional",
+              "description": "The unix timestamp of when this port forward rule was original created.<br>",
+              "validators": [
+                {
+                  "custom": {
+                    "imports": [
+                      {
+                        "path": "github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+                      }
+                    ],
+                    "schema_definition": "int64validator.Between(0, 99999999999999)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "int64": {
+              "computed_optional_required": "computed",
+              "description": "The ID of the object to target."
+            }
+          },
+          {
+            "name": "apply_immediately",
+            "bool": {
+              "computed_optional_required": "computed_optional",
+              "default": {
+                "static": true
+              },
+              "description": "Whether to apply the staged change to the running firewall immediately after this resource is created, updated, or deleted. Defaults to true. Set to false to batch multiple changes and apply them separately."
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "firewall_rule",
       "schema": {
         "attributes": [
