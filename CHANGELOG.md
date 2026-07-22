@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/laurigates/terraform-provider-pfsense/compare/v0.1.0...v0.1.1) (2026-07-22)
+
+
+### Bug Fixes
+
+* include registry manifest.json in the signed SHA256SUMS ([#13](https://github.com/laurigates/terraform-provider-pfsense/issues/13)) ([c7d260f](https://github.com/laurigates/terraform-provider-pfsense/commit/c7d260f09e6241a5cfbaa59c04a4539a99e74080))
+
 ## 0.1.0 (2026-07-15)
 
 
