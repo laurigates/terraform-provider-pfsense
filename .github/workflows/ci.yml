@@ -53,3 +53,31 @@ jobs:
 
       - name: Verify no codegen drift
         run: git diff --exit-code
+
+  # Docs drift gate: the committed docs/ must match what tfplugindocs renders
+  # from the provider schema plus examples/. Catches schema changes and example
+  # edits committed without regenerating — the registry serves docs/ verbatim,
+  # so drift there ships as wrong documentation.
+  docs-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # tools/ is a separate module with its own (newer) Go requirement, so it
+      # is the version file for this job — not the provider's go.mod.
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: tools/go.mod
+
+      - uses: extractions/setup-just@53165ef7e734c5c07cb06b3c8e7b647c5aa16db3 # v4
+
+      - run: just docs
+
+      # `git add -N` stages intent-to-add for untracked files so `git diff`
+      # sees them: a newly registered resource yields a brand-new docs page,
+      # which a plain `git diff` would silently ignore. tfplugindocs also
+      # reformats examples/**/*.tf, so example drift is caught here too.
+      - name: Verify no docs drift
+        run: |
+          git add -N .
+          git diff --exit-code

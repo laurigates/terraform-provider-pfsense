@@ -36,6 +36,22 @@ test:
 vet:
     go vet ./...
 
+# tfplugindocs lives in the separate tools/ module so it stays out of the
+# provider's own dependency graph. It shells out to `terraform providers
+# schema -json`, downloading a Terraform CLI if none is on PATH — tofu is not
+# a drop-in (the only tofu route is pre-generating the schema JSON for
+# --providers-schema, which needs the provider in a filesystem mirror rather
+# than the dev_overrides this repo uses). Generation is read-only against a
+# schema, so the terraform default is the simpler path.
+#
+# docs/ is reserved for registry output and is wholly generated — contributor
+# docs live in contributing/. Anything added under docs/ by hand is either
+# overwritten here or silently ignored by the registry.
+
+# Regenerate registry docs/ from the provider schema and examples/
+docs:
+    cd tools && go generate ./...
+
 # Regenerate provider code from spec/openapi.json
 generate:
     python3 scripts/flatten_spec.py
