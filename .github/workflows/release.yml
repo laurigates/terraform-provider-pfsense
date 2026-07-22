@@ -25,8 +25,7 @@ jobs:
         uses: crazy-max/ghaction-import-gpg@v6
         id: import_gpg
         with:
-          # Pushed to this repo by gitops (see gitops secrets.tf); the passphrase
-          # is a companion secret.
+          # Stored as a repo secret; the passphrase is a companion secret.
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
 

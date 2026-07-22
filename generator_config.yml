@@ -2,7 +2,7 @@
 #
 # Maps pfSense REST API v2 endpoint pairs (singular = CRUD, plural = list) to
 # Terraform resources / data sources, per docs/prps/pfsense-terraform-provider.md
-# in the gitops repo.
+# in a private planning repo.
 #
 # Note on the response envelope: every API response is wrapped in
 # {code, status, response_id, message, data: {...}} (the `Success` schema,

@@ -38,12 +38,9 @@ private signing key, so a human performs them.
    > `E4F6F4128E17E32AB2C8772A3F53BA4CE9A6E2A9`.
 2. **Add the repo secrets** — `GPG_PRIVATE_KEY` (ASCII-armored private key,
    `gpg --armor --export-secret-keys <fingerprint>`) and `GPG_PASSPHRASE`
-   (empty string if the key has no passphrase). In this org these are pushed by
-   gitops rather than set by hand: the key lives in the `gpg-private-key`
-   Secret Manager container and is pushed to repos flagged
-   `terraform_registry = true` in `gitops/repositories.tf`. A no-passphrase
-   key needs no `GPG_PASSPHRASE` secret at all — the workflow's empty-string
-   default is correct.
+   (empty string if the key has no passphrase). A no-passphrase key needs no
+   `GPG_PASSPHRASE` secret at all — the workflow's empty-string default is
+   correct.
 3. **Upload the GPG _public_ key to the registry** — Terraform Registry → your
    namespace → Settings → GPG Keys → add
    `gpg --armor --export <fingerprint>`.

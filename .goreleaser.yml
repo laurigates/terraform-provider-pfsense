@@ -52,7 +52,7 @@ signs:
   - artifacts: checksum
     args:
       # GPG_FINGERPRINT selects the signing key; the key + passphrase are
-      # provided by the release workflow (from repo secrets, pushed by gitops).
+      # provided by the release workflow (from repo secrets).
       - "--batch"
       - "--local-user"
       - "{{ .Env.GPG_FINGERPRINT }}"

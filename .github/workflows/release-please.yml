@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - main
-  # Allow manual triggering, e.g. after the gitops apply lands the App
-  # credentials or after a stale release PR is closed.
+  # Allow manual triggering, e.g. after the App credentials are provisioned
+  # or after a stale release PR is closed.
   workflow_dispatch: {}
 
 # Prevent concurrent runs from racing on the release-please branch.
