@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/laurigates/terraform-provider-pfsense/compare/v0.1.1...v0.1.2) (2026-07-22)
+
+
+### Continuous Integration
+
+* catch untracked files in the codegen drift gate ([#17](https://github.com/laurigates/terraform-provider-pfsense/issues/17)) ([4b5d32a](https://github.com/laurigates/terraform-provider-pfsense/commit/4b5d32aefdeea28ba491ab85ce9285e47a0784c0))
+
 ## [0.1.1](https://github.com/laurigates/terraform-provider-pfsense/compare/v0.1.0...v0.1.1) (2026-07-22)
 
 
