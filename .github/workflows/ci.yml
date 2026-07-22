@@ -51,8 +51,13 @@ jobs:
 
       - run: just generate
 
+      # `git add -N` stages intent-to-add so `git diff` sees untracked files:
+      # adding an endpoint to the spec yields a brand-new *_gen.go, which a
+      # plain `git diff` would silently ignore. Same guard as docs-diff.
       - name: Verify no codegen drift
-        run: git diff --exit-code
+        run: |
+          git add -N .
+          git diff --exit-code
 
   # Docs drift gate: the committed docs/ must match what tfplugindocs renders
   # from the provider schema plus examples/. Catches schema changes and example
