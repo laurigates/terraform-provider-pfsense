@@ -39,6 +39,14 @@ archives:
 checksum:
   name_template: "{{ .ProjectName }}_{{ .Version }}_SHA256SUMS"
   algorithm: sha256
+  # The registry manifest must appear in SHA256SUMS (and therefore be covered
+  # by the GPG signature below) or the Terraform Registry rejects the release
+  # with "Could not find all required assets ... missing SHA256 checksum for
+  # manifest.json". release.extra_files below only uploads it to the GitHub
+  # release — it does not add it to the checksum file on its own.
+  extra_files:
+    - glob: "terraform-registry-manifest.json"
+      name_template: "{{ .ProjectName }}_{{ .Version }}_manifest.json"
 
 signs:
   - artifacts: checksum
