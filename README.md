@@ -5,8 +5,7 @@ A Terraform/OpenTofu provider for pfSense, built on the
 (`pfSense-pkg-RESTAPI`). Schema and models are **code-generated from the
 API's OpenAPI spec**; only the CRUD glue is hand-written.
 
-Spec: `docs/prps/pfsense-terraform-provider.md` in the
-[gitops](https://github.com/laurigates/gitops) repo.
+Spec: `docs/prps/pfsense-terraform-provider.md` in a private planning repo.
 
 ## Status — M0 spike (complete)
 
@@ -118,8 +117,8 @@ TF_CLI_CONFIG_FILE=../dev.tfrc PFSENSE_HOST=https://<box> PFSENSE_API_KEY=<key> 
 4. **`id` stability strategy** — positional ids (see open question 5) make
    drift detection fragile for rules, which are reordered more often than
    aliases; decide on natural-key lookup or `_links`-based tracking.
-5. **Repo/publishing wiring** — create the GitHub repo, adopt into
-   `gitops/repositories.tf`, `release_please = true`, registry publishing.
+5. **Repo/publishing wiring** — create the GitHub repo, wire up
+   release-please and registry publishing.
    **Publish with fresh history**: commits before the sanitization pass
    embedded the real home-network alias inventory in
    `examples/import-aliases/main.tf` — export the tree as a new initial
